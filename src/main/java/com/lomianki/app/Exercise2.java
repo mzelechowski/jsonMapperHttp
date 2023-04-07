@@ -1,30 +1,34 @@
 package com.lomianki.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lomianki.model.Person;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public class Main {
+public class Exercise2 {
     public static void main(String[] args) {
-        /*Przykład pobiernia JSON'a wystawionego przez Mockoon'a na adresie http://localhost:3001/persons
+        /*Przykład pobiernia JSON'a wystawionego przez Mockoon'a na adresie http://localhost:3002/persons
          * w postaci
          * {
-         *   "name": "Maciej",
-         *   "email": "maciej@gmail.com",
-         *   "age": 30
-         * }
+         *  "data": {
+         *    "name": "Maciej",
+         *    "email": "maciej@gmail.com",
+         *    "age": 30
+         *  }
+         *}
+         * Pobierz email przy pomocy objectMapper.readTree
          */
-        String baseURL = "http://localhost:3001/persons";
-        String jsonData=getData(baseURL);
-        ObjectMapper objectMapper=new ObjectMapper();
+        String baseURL = "http://localhost:3002/persons";
+        String jsonData = getData(baseURL);
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Person person=objectMapper.readValue(jsonData, Person.class);
-            System.out.println(person.getEmail());
+            JsonNode jsonNode = objectMapper.readTree(jsonData);
+           String email=jsonNode.get("data").get("email").toString();
+            System.out.println(email);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -37,7 +41,7 @@ public class Main {
 
             URL url = new URL(baseURL);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            while((line=bufferedReader.readLine())!=null){
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
             }
         } catch (IOException e) {
