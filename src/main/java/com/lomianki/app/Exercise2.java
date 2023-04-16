@@ -36,11 +36,10 @@ public class Exercise2 {
 
     private static String getData(String baseURL) {
         StringBuilder stringBuilder = new StringBuilder();
-        String line;
         try {
-
             URL url = new URL(baseURL);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
             }
